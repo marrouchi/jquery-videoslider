@@ -1,0 +1,42 @@
+{
+  "name": "jquery-videoslider",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/marrouchi/jquery-videoslider.git"
+  },
+  "license": "MIT",
+  "version": "0.1.0",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt qunit"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-qunit": "~0.2.0",
+    "grunt-contrib-cssmin": "^2.2.0",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-uglify": "~0.2.0",
+    "grunt-contrib-watch": "~0.4.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt": "~0.4.5"
+  },
+  "description": "Play/Pause video on scroll while displaying text slides.",
+  "bugs": {
+    "url": "https://github.com/marrouchi/jquery-videoslider/issues"
+  },
+  "homepage": "https://github.com/marrouchi/jquery-videoslider#readme",
+  "main": "Gruntfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {},
+  "keywords": [
+    "jquery",
+    "video",
+    "slider",
+    "scroll"
+  ],
+  "author": "Mohamed Marrouchi"
+}

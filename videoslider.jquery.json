@@ -1,0 +1,27 @@
+{
+  "name": "videoslider",
+  "title": "Videoslider",
+  "description": "Play/Pause video on scroll while displaying text slides.",
+  "version": "0.1.0",
+  "homepage": "https://github.com/marrouchi/jquery-videoslider.git",
+  "author": {
+    "name": "Mohamed marrouchi",
+    "email": "marrouchi.mohamed@gmail.com",
+    "url": "http://marrouchi.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/marrouchi/jquery-videoslider.git"
+  },
+  "bugs": "https://github.com/marrouchi/jquery-videoslider/issues",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/marrouchi/jquery-videoslider/blob/master/LICENSE-MIT"
+    }
+  ],
+  "dependencies": {
+    "jquery": "*"
+  },
+  "keywords": []
+}

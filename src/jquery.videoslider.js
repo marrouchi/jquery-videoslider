@@ -52,7 +52,6 @@
     // Show last slide when ended
     $(videoSlider.video).on('ended', function(){
       videoSlider.isPlaying = false;
-      //$('#videoslider .videoslider-slide:last').fadeIn();
     });
 
     // Pause video when interval limit is reached

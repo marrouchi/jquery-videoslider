@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Videoslider earth demo</title>
+  <!-- Load local jQuery. This can be overridden with a ?jquery=___ param. -->
+  <script src="../libs/jquery-loader.js"></script>
+  <!-- Load local lib and tests. -->
+  <script src="../src/jquery.videoslider.js"></script>
+  <link rel="stylesheet" href="../dist/jquery.videoslider.min.css">
+
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-size: 125%;
+        font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <div id="videoslider">
+    <video class="videoslider-video" preload="auto">
+      <source src="http://www.sample-videos.com/video/mp4/720/big_buck_bunny_720p_1mb.mp4" type="video/mp4">
+      Your browser does not support HTML5 video.
+    </video>
+    <div class="videoslider-slides">
+      <div class="videoslider-slide" data-vstime="0">
+        <h2>Headline #0</h2>
+        <p>Et olim licet otiosae sint tribus pacataeque centuriae et nulla suffragiorum certamina set Pompiliani redierit securitas temporis, per omnes tamen quotquot sunt partes terrarum, ut domina suscipitur et regina et ubique patrum reverenda cum auctoritate canities populique Romani nomen circumspectum et verecundum.</p>
+      </div>
+      <div class="videoslider-slide" data-vstime="9">
+        <h2>Headline #1</h2>
+        <p>Et olim licet otiosae sint tribus pacataeque centuriae et nulla suffragiorum certamina set Pompiliani redierit securitas temporis, per omnes tamen quotquot sunt partes terrarum, ut domina suscipitur et regina et ubique patrum reverenda cum auctoritate canities populique Romani nomen circumspectum et verecundum.</p>
+      </div>
+      <div class="videoslider-slide" data-vstime="17">
+        <h2>Headline #2</h2>
+        <p>Et olim licet otiosae sint tribus pacataeque centuriae et nulla suffragiorum certamina set Pompiliani redierit securitas temporis, per omnes tamen quotquot sunt partes terrarum, ut domina suscipitur et regina et ubique patrum reverenda cum auctoritate canities populique Romani nomen circumspectum et verecundum.</p>
+      </div>
+      <div class="videoslider-slide" data-vstime="27">
+        <h2>Headline #3</h2>
+        <p>Et olim licet otiosae sint tribus pacataeque centuriae et nulla suffragiorum certamina set Pompiliani redierit securitas temporis, per omnes tamen quotquot sunt partes terrarum, ut domina suscipitur et regina et ubique patrum reverenda cum auctoritate canities populique Romani nomen circumspectum et verecundum.</p>
+      </div>
+      <div class="videoslider-slide" data-vstime="37">
+        <h2>Headline #4</h2>
+        <p>Et olim licet otiosae sint tribus pacataeque centuriae et nulla suffragiorum certamina set Pompiliani redierit securitas temporis, per omnes tamen quotquot sunt partes terrarum, ut domina suscipitur et regina et ubique patrum reverenda cum auctoritate canities populique Romani nomen circumspectum et verecundum.</p>
+      </div>
+      <div class="videoslider-slide" data-vstime="duration">
+        <h2>Headline #5</h2>
+        <p>Et olim licet otiosae sint tribus pacataeque centuriae et nulla suffragiorum certamina set Pompiliani redierit securitas temporis, per omnes tamen quotquot sunt partes terrarum, ut domina suscipitur et regina et ubique patrum reverenda cum auctoritate canities populique Romani nomen circumspectum et verecundum.</p>
+      </div>
+    </div>
+  </div>
+  <script>
+    $.videoslider();
+  </script>
+</body>
+</html>

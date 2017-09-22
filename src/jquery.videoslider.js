@@ -14,7 +14,6 @@
     options = $.extend({}, $.videoslider.options, options);
 
     this.position = 0; // current position
-    this.isPlaying = false; // scroll direction
     this.scrollDirection = 'forward';
     this.intervals = $("#videoslider .videoslider-slide")
       .map(function(){return $(this).data('vstime')})
@@ -22,21 +21,15 @@
 
     this.video = $("#videoslider video").get(0); // get rid of jquery to handle video controls
 
-    // Define rewind() function
-    this.rewind = function (){
-      var requestAnimationFrame = window.requestAnimationFrame ||
-      window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
-      function (fn) {window.setTimeout(fn, 15)};
+    // Define play() function
+    this.play = function (rewind){
+      rewind = typeof rewind === 'undefined' ? false : rewind;
 
-      var videoSlider = this;
-
-      var step = function(){
-         if(videoSlider.video.currentTime > 0 && videoSlider.isPlaying){
-             videoSlider.video.currentTime += -.05;
-             requestAnimationFrame(step);
-         }
-      };
-      step();
+      var step = options.stepRate * ( rewind ? -1 : 1);
+      if ((rewind && this.video.currentTime > 0) 
+        || (!rewind && this.video.currentTime < this.video.duration)) {
+        this.video.currentTime += step;
+      }
     };
 
     var videoSlider = this;
@@ -56,32 +49,47 @@
 
     // Pause video when interval limit is reached
     $(videoSlider.video).on('timeupdate', function(){
-      if((videoSlider.scrollDirection === 'forward' && this.currentTime >= videoSlider.intervals[videoSlider.position])
-        || (videoSlider.scrollDirection === 'backward' && this.currentTime <= videoSlider.intervals[videoSlider.position]) ){
-          this.pause();
-          videoSlider.isPlaying = false;
-          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeIn();
+      console.log(videoSlider.scrollDirection, this.currentTime, '('+videoSlider.position+')');
+      if (videoSlider.scrollDirection === 'forward') {
+        // Move forward
+        if (this.currentTime > (videoSlider.intervals[videoSlider.position] + options.slideTime)) {
+          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeOut('slow');
+          videoSlider.position++;
+        } else if (this.currentTime >= videoSlider.intervals[videoSlider.position]) {
+          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeIn('slow');  
+        } 
+      } else if (videoSlider.scrollDirection === 'backward') {
+        // Move backwards
+        if (this.currentTime < videoSlider.intervals[videoSlider.position]) {
+          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeOut('slow');
+          videoSlider.position--;
+        } else if (this.currentTime <= (videoSlider.intervals[videoSlider.position] + options.slideTime)) {
+          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeIn('slow');
+        }
       }
+
+    });
+
+    // Handle Key Up/Down
+    $(document).keydown(function(event) {
+        switch(event.which) {
+            case 38: // up
+              videoSlider.scrollDirection = 'backward';
+              break;
+            case 40: // down
+              videoSlider.scrollDirection = 'forward';
+              break;
+            default:
+              return; // exit this handler for other keys
+        }
+        videoSlider.play(videoSlider.scrollDirection === 'backward');
+        e.preventDefault(); // prevent the default action (scroll / move caret)
     });
 
     // Handle scroll
     $('#videoslider').on('mousewheel', function(event) {
-      // Do not allow scroll when the video is playing
-      if(!videoSlider.isPlaying){
-        videoSlider.isPlaying = true; // Lock scroll
-        videoSlider.scrollDirection = (event.originalEvent.deltaY > 0) ? 'forward' : 'backward';
-        if(videoSlider.scrollDirection === 'forward' && videoSlider.position < videoSlider.intervals.length - 1){
-          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeOut();
-          videoSlider.position++;
-          videoSlider.video.play();
-        } else if(videoSlider.scrollDirection === 'backward' && videoSlider.position > 0) {
-          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeOut();
-          videoSlider.position--;
-          videoSlider.rewind();
-        } else {
-          videoSlider.isPlaying = false;
-        }
-      }
+      videoSlider.scrollDirection = (event.originalEvent.deltaY > 0) ? 'forward' : 'backward';
+      videoSlider.play(videoSlider.scrollDirection === 'backward');
       event.preventDefault();
     });
 
@@ -91,6 +99,8 @@
   // Static method default options.
   $.videoslider.options = {
     playbackRate: 1,
+    stepRate: .2,
+    slideTime: 1
   };
 
 }(jQuery));

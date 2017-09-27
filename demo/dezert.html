@@ -19,7 +19,7 @@
   </style>
 </head>
 <body>
-  <div id="videoslider">
+  <div id="webdoc-cover-video" class="videoslider">
     <video class="videoslider-video">
       <source src="https://player.vimeo.com/external/234999895.hd.mp4?s=705b0a8baf45b293dabb84af1cea697c830873eb&profile_id=174" type="video/mp4">
       Your browser does not support HTML5 video.
@@ -52,7 +52,7 @@
     </div>
   </div>
   <script>
-    $.videoslider({enableRewind: false});
+    $.videoslider({enableRewind: false, selector: '#webdoc-cover-video'});
   </script>
 </body>
 </html>

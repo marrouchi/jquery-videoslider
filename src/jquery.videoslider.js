@@ -16,11 +16,12 @@
     this.position = 0; // current position
     this.isPlaying = false; // scroll direction
     this.scrollDirection = 'forward';
-    this.intervals = $("#videoslider .videoslider-slide")
+    this.selector = $(options.selector);
+    this.intervals = $(".videoslider-slide", this.selector)
       .map(function(){return $(this).data('vstime')})
       .toArray();
 
-    this.video = $("#videoslider video").get(0); // get rid of jquery to handle video controls
+    this.video = $("video", this.selector).get(0); // get rid of jquery to handle video controls
 
     // Define rewind() function
     this.rewind = function () {
@@ -46,7 +47,7 @@
         if(videoSlider.scrollDirection === 'forward'
           && videoSlider.position < videoSlider.intervals.length - 1){
           // Play forward
-          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeOut();
+          $('.videoslider-slide:eq('+videoSlider.position+')', this.selector).fadeOut();
           videoSlider.position++;
           videoSlider.video.play();
           event.preventDefault();
@@ -54,7 +55,7 @@
           videoSlider.scrollDirection === 'backward'
           && videoSlider.position > 0) {
           // Play backwards
-          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeOut();
+          $('.videoslider-slide:eq('+videoSlider.position+')', this.selector).fadeOut();
           videoSlider.position--;
           videoSlider.rewind();
           event.preventDefault();
@@ -87,7 +88,7 @@
         && this.currentTime <= videoSlider.intervals[videoSlider.position]) ){
           this.pause();
           videoSlider.isPlaying = false;
-          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeIn();
+          $('.videoslider-slide:eq('+videoSlider.position+')', videoSlider.selector).fadeIn();
       }
     });
 
@@ -107,7 +108,7 @@
     });
 
     // Handle scroll
-    $('#videoslider').on('mousewheel', function(event) {
+    $(videoSlider.selector).on('mousewheel', function(event) {
       videoSlider.scrollDirection = (event.originalEvent.deltaY > 0) ? 'forward' : 'backward';
       videoSlider.slideHandle(event);
     });
@@ -118,7 +119,8 @@
   // Static method default options.
   $.videoslider.options = {
     playbackRate: 1,
-    enableRewind: true
+    enableRewind: true,
+    selector: '#videoslider'
   };
 
 }(jQuery));

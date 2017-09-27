@@ -1,5 +1,5 @@
-/*! Videoslider - v0.1.0 - 2017-09-21
-* https://github.com/medmar/jquery-videoslider
+/*! Videoslider - v0.1.0 - 2017-09-27
+* https://github.com/marrouchi/jquery-videoslider.git
 * Copyright (c) 2017 Mohamed marrouchi; Licensed MIT */
 (function($) {
 
@@ -11,14 +11,15 @@
     this.position = 0; // current position
     this.isPlaying = false; // scroll direction
     this.scrollDirection = 'forward';
-    this.intervals = $("#videoslider .videoslider-slide")
+    this.selector = $(options.selector);
+    this.intervals = $(".videoslider-slide", this.selector)
       .map(function(){return $(this).data('vstime')})
       .toArray();
 
-    this.video = $("#videoslider video").get(0); // get rid of jquery to handle video controls
+    this.video = $("video", this.selector).get(0); // get rid of jquery to handle video controls
 
     // Define rewind() function
-    this.rewind = function (){
+    this.rewind = function () {
       var requestAnimationFrame = window.requestAnimationFrame ||
       window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame ||
       function (fn) {window.setTimeout(fn, 15)};
@@ -34,6 +35,31 @@
       step();
     };
 
+    this.slideHandle = function(event){
+      // Do not allow scroll when the video is playing
+      if(!videoSlider.isPlaying){
+        videoSlider.isPlaying = true; // Lock controls
+        if(videoSlider.scrollDirection === 'forward'
+          && videoSlider.position < videoSlider.intervals.length - 1){
+          // Play forward
+          $('.videoslider-slide:eq('+videoSlider.position+')', this.selector).fadeOut();
+          videoSlider.position++;
+          videoSlider.video.play();
+          event.preventDefault();
+        } else if(options.enableRewind &&
+          videoSlider.scrollDirection === 'backward'
+          && videoSlider.position > 0) {
+          // Play backwards
+          $('.videoslider-slide:eq('+videoSlider.position+')', this.selector).fadeOut();
+          videoSlider.position--;
+          videoSlider.rewind();
+          event.preventDefault();
+        } else {
+          videoSlider.isPlaying = false;
+        }
+      }
+    }
+
     var videoSlider = this;
 
     // Add first & last positions
@@ -47,46 +73,49 @@
     // Show last slide when ended
     $(videoSlider.video).on('ended', function(){
       videoSlider.isPlaying = false;
-      //$('#videoslider .videoslider-slide:last').fadeIn();
     });
 
     // Pause video when interval limit is reached
     $(videoSlider.video).on('timeupdate', function(){
-      if((videoSlider.scrollDirection === 'forward' && this.currentTime >= videoSlider.intervals[videoSlider.position])
-        || (videoSlider.scrollDirection === 'backward' && this.currentTime <= videoSlider.intervals[videoSlider.position]) ){
+      if((videoSlider.scrollDirection === 'forward'
+        && this.currentTime >= videoSlider.intervals[videoSlider.position])
+        || (videoSlider.scrollDirection === 'backward'
+        && this.currentTime <= videoSlider.intervals[videoSlider.position]) ){
           this.pause();
           videoSlider.isPlaying = false;
-          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeIn();
+          $('.videoslider-slide:eq('+videoSlider.position+')', videoSlider.selector).fadeIn();
       }
     });
 
-    // Handle scroll
-    $('#videoslider').on('mousewheel', function(event) {
-      // Do not allow scroll when the video is playing
-      if(!videoSlider.isPlaying){
-        videoSlider.isPlaying = true; // Lock scroll
-        videoSlider.scrollDirection = (event.originalEvent.deltaY > 0) ? 'forward' : 'backward';
-        if(videoSlider.scrollDirection === 'forward' && videoSlider.position < videoSlider.intervals.length - 1){
-          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeOut();
-          videoSlider.position++;
-          videoSlider.video.play();
-        } else if(videoSlider.scrollDirection === 'backward' && videoSlider.position > 0) {
-          $('#videoslider .videoslider-slide:eq('+videoSlider.position+')').fadeOut();
-          videoSlider.position--;
-          videoSlider.rewind();
-        } else {
-          videoSlider.isPlaying = false;
-        }
+    // Handle Key Up/Down
+    $(document).keydown(function(event) {
+      switch(event.which) {
+        case 38: // up
+          videoSlider.scrollDirection = 'backward';
+          break;
+        case 40: // down
+          videoSlider.scrollDirection = 'forward';
+          break;
+        default:
+          return; // exit this handler for other keys
       }
-      event.preventDefault();
+      videoSlider.slideHandle(event);
+    });
+
+    // Handle scroll
+    $(videoSlider.selector).on('mousewheel', function(event) {
+      videoSlider.scrollDirection = (event.originalEvent.deltaY > 0) ? 'forward' : 'backward';
+      videoSlider.slideHandle(event);
     });
 
     return;
   };
-  
+
   // Static method default options.
   $.videoslider.options = {
     playbackRate: 1,
+    enableRewind: true,
+    selector: '#videoslider'
   };
 
 }(jQuery));
